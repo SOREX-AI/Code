@@ -1,0 +1,1 @@
+export { compactStatusStyles } from './style';

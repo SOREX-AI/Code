@@ -1,0 +1,408 @@
+{
+  "name": "sorex-code",
+  "displayName": "SOREX Code",
+  "description": "Your AI coding assistant. Use your own local LLM or OpenAI-compatible endpoint to chat, search, and edit code with SOREX Code.",
+  "version": "0.0.1",
+  "publisher": "sorex-code",
+  "license": "Apache-2.0",
+  "engines": {
+    "vscode": "^1.125.0"
+  },
+  "categories": [
+    "AI",
+    "Other"
+  ],
+  "activationEvents": [
+    "onView:sorex.chatView",
+    "onCommand:sorex.openChat",
+    "onCommand:sorex.openSettings",
+    "onCommand:sorex.clearChat",
+    "onCommand:sorex.testReadWorkspace",
+    "onCommand:sorex.openIndexingSettings",
+    "onCommand:sorex.refreshIndex"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "sorex.openChat",
+        "title": "SOREX Code: Open Local Agent"
+      },
+      {
+        "command": "sorex.openSettings",
+        "title": "SOREX Code: Open Settings"
+      },
+      {
+        "command": "sorex.testReadWorkspace",
+        "title": "SOREX Code: Test Workspace Tools"
+      },
+      {
+        "command": "sorex.clearChat",
+        "title": "SOREX Code: Clear Chat"
+      },
+      {
+        "command": "sorex.openIndexingSettings",
+        "title": "SOREX Code: Open Indexing Settings"
+      },
+      {
+        "command": "sorex.refreshIndex",
+        "title": "SOREX Code: Refresh Workspace Index"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "sorex",
+          "title": "SOREX Code",
+          "icon": "media/sorex-icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "sorex": [
+        {
+          "id": "sorex.chatView",
+          "name": "SOREX Code",
+          "type": "webview"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "SOREX Code",
+      "properties": {
+        "sorex.endpoint": {
+          "type": "string",
+          "default": "http://localhost:1234/v1",
+          "description": "OpenAI-compatible local model endpoint. LM Studio default is http://localhost:1234/v1."
+        },
+        "sorex.model": {
+          "type": "string",
+          "default": "",
+          "description": "Selected model id. Leave blank to show Select model in the SOREX chat view."
+        },
+        "sorex.maxInputTokens": {
+          "type": "number",
+          "default": 32768,
+          "description": "Maximum input tokens SOREX assumes for budgeting."
+        },
+        "sorex.useProviderContext": {
+          "type": "boolean",
+          "default": false,
+          "description": "Use the selected provider/model reported context window when available. Falls back to sorex.maxInputTokens if unavailable."
+        },
+        "sorex.maxOutputTokens": {
+          "type": "number",
+          "default": 4096,
+          "description": "Maximum output tokens requested from the model."
+        },
+        "sorex.temperature": {
+          "type": "number",
+          "default": 0.15,
+          "description": "Sampling temperature for local model calls."
+        },
+        "sorex.compactAtPercent": {
+          "type": "number",
+          "default": 90,
+          "description": "Approximate context percent where SOREX auto-compacts conversation history."
+        },
+        "sorex.autoCompactEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically compact conversation history when the context trigger is reached."
+        },
+        "sorex.maxUserMessageChars": {
+          "type": "number",
+          "default": 24000,
+          "description": "Maximum characters allowed in a single user message before SOREX rejects it instead of poisoning the context window."
+        },
+        "sorex.providerMode": {
+          "type": "string",
+          "default": "lmstudio",
+          "enum": [
+            "lmstudio",
+            "ollama",
+            "jan",
+            "custom",
+            "openai",
+            "anthropic",
+            "google",
+            "openrouter"
+          ],
+          "description": "Provider mode. Local/OpenAI-compatible endpoints work now; cloud APIs require their official API keys."
+        },
+        "sorex.openaiEndpoint": {
+          "type": "string",
+          "default": "https://api.openai.com/v1",
+          "description": "OpenAI API endpoint used when Provider is OpenAI."
+        },
+        "sorex.openaiModel": {
+          "type": "string",
+          "default": "",
+          "description": "OpenAI model id used when Provider is OpenAI."
+        },
+        "sorex.anthropicEndpoint": {
+          "type": "string",
+          "default": "https://api.anthropic.com/v1",
+          "description": "Anthropic API endpoint used when Provider is Anthropic."
+        },
+        "sorex.anthropicModel": {
+          "type": "string",
+          "default": "",
+          "description": "Anthropic model id used when Provider is Anthropic."
+        },
+        "sorex.googleEndpoint": {
+          "type": "string",
+          "default": "https://generativelanguage.googleapis.com/v1beta/openai",
+          "description": "Google Gemini OpenAI-compatible endpoint used when Provider is Google."
+        },
+        "sorex.googleModel": {
+          "type": "string",
+          "default": "",
+          "description": "Google Gemini model id used when Provider is Google."
+        },
+        "sorex.openrouterEndpoint": {
+          "type": "string",
+          "default": "https://openrouter.ai/api/v1",
+          "description": "OpenRouter OpenAI-compatible endpoint used when Provider is OpenRouter."
+        },
+        "sorex.openrouterModel": {
+          "type": "string",
+          "default": "",
+          "description": "OpenRouter model id used when Provider is OpenRouter."
+        },
+        "sorex.preferLocalModels": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show local LM Studio models before cloud/provider options."
+        },
+        "sorex.cloudApiKeyStorage": {
+          "type": "string",
+          "default": "secretStorage",
+          "enum": [
+            "secretStorage",
+            "disabled"
+          ],
+          "description": "Reserved cloud API key storage mode. SOREX does not use ChatGPT subscription login as an API key."
+        },
+        "sorex.maxToolRounds": {
+          "type": "number",
+          "default": 8,
+          "description": "Maximum model/tool loop rounds per request before SOREX stops for safety."
+        },
+        "sorex.nativeToolCallingEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Use native provider tool calling when SOREX thinks the selected model supports it. When disabled, SOREX uses text tool-call fallback parsing."
+        },
+        "sorex.conservativeToolCalling": {
+          "type": "boolean",
+          "default": false,
+          "description": "Use fewer automatic tool calls and pause earlier during broad searches."
+        },
+        "sorex.indexEnabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable SOREX workspace indexing for faster codebase recall."
+        },
+        "sorex.indexAutoRefresh": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically refresh the workspace index when stale or when settings change."
+        },
+        "sorex.indexStorageMode": {
+          "type": "string",
+          "default": "folder-json-vectors",
+          "enum": [
+            "folder-json",
+            "folder-json-vectors",
+            "memory-only"
+          ],
+          "description": "Workspace index storage type. Default folder-json stores .ai-index/manifest.json, chunks.json, and vectors.json when embeddings are enabled."
+        },
+        "sorex.indexRankingMode": {
+          "type": "string",
+          "default": "hybrid",
+          "enum": [
+            "hybrid",
+            "lexical",
+            "vector"
+          ],
+          "description": "Search ranking mode for workspace_index_search. Hybrid combines lexical and embedding vectors when available."
+        },
+        "sorex.indexEmbeddingProvider": {
+          "type": "string",
+          "default": "active",
+          "enum": [
+            "active",
+            "lmstudio",
+            "ollama",
+            "jan",
+            "custom",
+            "openai",
+            "google",
+            "openrouter"
+          ],
+          "description": "Provider used for SOREX index embeddings. Active uses the selected chat provider endpoint when compatible."
+        },
+        "sorex.indexEmbeddingAutoSelect": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically select a detected embedding model for the selected embedding provider when no model is set."
+        },
+        "sorex.indexIncludeGlobs": {
+          "type": "string",
+          "default": "",
+          "description": "Glob pattern included in SOREX workspace indexing. Blank uses SOREX built-in source-file defaults."
+        },
+        "sorex.indexExcludeGlobs": {
+          "type": "string",
+          "default": "",
+          "description": "Glob pattern excluded from SOREX workspace indexing. Blank uses SOREX built-in generated-folder exclusions."
+        },
+        "sorex.indexMaxFiles": {
+          "type": "number",
+          "default": 6000,
+          "description": "Maximum files SOREX indexes per workspace. SOREX stores results in .ai-index and reuses unchanged files on rebuild."
+        },
+        "sorex.indexMaxFileSizeKb": {
+          "type": "number",
+          "default": 384,
+          "description": "Maximum individual file size included in SOREX indexing."
+        },
+        "sorex.indexChunkChars": {
+          "type": "number",
+          "default": 2200,
+          "description": "Approximate characters per indexed chunk."
+        },
+        "sorex.indexChunkOverlap": {
+          "type": "number",
+          "default": 220,
+          "description": "Approximate overlap characters between adjacent indexed chunks."
+        },
+        "sorex.indexMaxResults": {
+          "type": "number",
+          "default": 16,
+          "description": "Default maximum results returned from workspace_index_search."
+        },
+        "sorex.indexStaleMs": {
+          "type": "number",
+          "default": 120000,
+          "description": "Milliseconds before SOREX considers the workspace index stale."
+        },
+        "sorex.indexEmbeddingEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Use the configured provider embedding endpoint to add semantic vectors to the SOREX workspace index. Falls back to lexical indexing if unavailable."
+        },
+        "sorex.indexEmbeddingEndpoint": {
+          "type": "string",
+          "default": "",
+          "description": "OpenAI-compatible embeddings endpoint base URL. Blank uses the active provider endpoint."
+        },
+        "sorex.indexEmbeddingModel": {
+          "type": "string",
+          "default": "",
+          "description": "Embedding model id used for SOREX workspace indexing. Example: text-embedding-nomic-embed-text-v1.5."
+        },
+        "sorex.indexEmbeddingBatchSize": {
+          "type": "number",
+          "default": 12,
+          "description": "Number of chunks per embedding request during indexing."
+        },
+        "sorex.indexEmbeddingWeight": {
+          "type": "number",
+          "default": 32,
+          "description": "Semantic similarity weight mixed into workspace_index_search ranking."
+        },
+        "sorex.includeToolSchemaInContextBudget": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include discounted tool schema overhead in SOREX context budget calculations."
+        },
+        "sorex.contextSafetyTokens": {
+          "type": "number",
+          "default": 1024,
+          "description": "Safety reserve used when estimating tool-capable context budget."
+        },
+        "sorex.webSearchMaxResults": {
+          "type": "number",
+          "default": 5,
+          "description": "Number of DuckDuckGo HTML search results returned by web_search."
+        },
+        "sorex.webFetchMaxChars": {
+          "type": "number",
+          "default": 12000,
+          "description": "Maximum characters returned by web_fetch."
+        },
+        "sorex.toolListDirEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable the list_dir tool."
+        },
+        "sorex.toolFileSearchEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable the file_search tool."
+        },
+        "sorex.toolGrepSearchEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable the grep_search tool."
+        },
+        "sorex.toolReadFileEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable the read_file tool."
+        },
+        "sorex.toolDiagnosticsEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable the get_errors diagnostics tool."
+        },
+        "sorex.toolWorkspaceIndexSearchEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable workspace_index_search."
+        },
+        "sorex.toolWorkspaceIndexRefreshEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable workspace_index_refresh."
+        },
+        "sorex.toolEditFilesEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable file mutation tools such as replace, insert, write, delete, and create directory."
+        },
+        "sorex.toolTerminalEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable the run_in_terminal tool."
+        },
+        "sorex.toolWebSearchEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable the web_search tool."
+        },
+        "sorex.toolWebFetchEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable the web_fetch tool."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "node ./node_modules/typescript/bin/tsc -p ./",
+    "watch": "node ./node_modules/typescript/bin/tsc -watch -p ./",
+    "package": "node ./node_modules/@vscode/vsce/vsce package --no-rewrite-relative-links --allow-missing-repository"
+  },
+  "devDependencies": {
+    "@types/node": "^26.0.1",
+    "@types/vscode": "^1.125.0",
+    "@vscode/vsce": "^3.9.2",
+    "typescript": "^6.0.3",
+    "styled-components": "^6.4.3"
+  },
+  "icon": "media/sorex-icon.png"
+}

@@ -1,0 +1,33 @@
+<svg width="172" height="172" viewBox="14 14 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="SOREX Code pulsing logo">
+  <defs>
+    <path id="sorex-mark" d="M71.0,29.0 L70.0,30.0 L66.0,31.0 L63.0,35.0 L63.0,58.0 L64.0,59.0 L66.0,58.0 L66.0,36.0 L69.0,33.0 L74.0,33.0 L86.0,45.0 L86.0,48.0 L84.0,50.0 L77.0,50.0 L76.0,51.0 L74.0,51.0 L72.0,53.0 L71.0,55.0 L71.0,67.0 L69.0,68.0 L63.0,75.0 L63.0,91.0 L64.0,92.0 L64.0,94.0 L66.0,96.0 L70.0,98.0 L73.0,98.0 L74.0,97.0 L76.0,97.0 L86.0,87.0 L86.0,81.0 L87.0,80.0 L90.0,80.0 L92.0,79.0 L94.0,77.0 L95.0,77.0 L95.0,76.0 L97.0,74.0 L98.0,72.0 L98.0,59.0 L96.0,55.0 L93.0,52.0 L91.0,52.0 L90.0,53.0 L90.0,54.0 L95.0,60.0 L95.0,70.0 L94.0,71.0 L94.0,73.0 L92.0,75.0 L88.0,77.0 L84.0,77.0 L83.0,78.0 L83.0,85.0 L82.0,87.0 L80.0,88.0 L74.0,94.0 L69.0,94.0 L67.0,92.0 L67.0,75.0 L73.0,70.0 L84.0,70.0 L86.0,69.0 L86.0,68.0 L84.0,66.0 L75.0,66.0 L74.0,65.0 L75.0,64.0 L75.0,55.0 L76.0,54.0 L83.0,54.0 L87.0,52.0 L89.0,49.0 L89.0,43.0 L77.0,31.0 Z M50.0,29.0 L49.0,30.0 L46.0,30.0 L33.0,42.0 L32.0,44.0 L32.0,48.0 L36.0,53.0 L38.0,53.0 L39.0,54.0 L45.0,54.0 L47.0,56.0 L47.0,65.0 L46.0,66.0 L38.0,66.0 L36.0,67.0 L36.0,69.0 L37.0,70.0 L49.0,70.0 L55.0,76.0 L55.0,91.0 L52.0,94.0 L48.0,94.0 L46.0,93.0 L39.0,86.0 L39.0,79.0 L38.0,77.0 L33.0,77.0 L28.0,73.0 L27.0,71.0 L27.0,59.0 L31.0,55.0 L31.0,53.0 L29.0,52.0 L24.0,58.0 L24.0,73.0 L25.0,75.0 L29.0,79.0 L34.0,80.0 L35.0,81.0 L36.0,88.0 L44.0,96.0 L48.0,98.0 L54.0,97.0 L58.0,92.0 L58.0,74.0 L50.0,66.0 L50.0,54.0 L45.0,50.0 L38.0,50.0 L36.0,48.0 L36.0,44.0 L48.0,33.0 L53.0,33.0 L55.0,35.0 L55.0,57.0 L56.0,59.0 L58.0,59.0 L59.0,58.0 L59.0,36.0 L56.0,31.0 L54.0,30.0 L51.0,30.0 Z"/>
+    <filter id="line-halo" x="-55%" y="-55%" width="210%" height="210%">
+      <feGaussianBlur stdDeviation="2.8" result="blur">
+        <animate attributeName="stdDeviation" values="1.6;6.2;1.6" dur="2.15s" repeatCount="indefinite"/>
+      </feGaussianBlur>
+      <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.40 0 0 0 0 0.95 0 0 0 0 1 0 0 0 1.35 0" result="glow"/>
+      <feMerge>
+        <feMergeNode in="glow"/>
+      </feMerge>
+    </filter>
+    <filter id="soft-edge" x="-35%" y="-35%" width="170%" height="170%">
+      <feGaussianBlur stdDeviation=".45" result="soft"/>
+      <feMerge>
+        <feMergeNode in="soft"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <g>
+    <use href="#sorex-mark" fill="#7eeeff" opacity=".48" filter="url(#line-halo)">
+      <animate attributeName="opacity" values=".34;1;.34" dur="2.15s" repeatCount="indefinite"/>
+    </use>
+    <use href="#sorex-mark" fill="#d8fbff" opacity=".42" filter="url(#line-halo)">
+      <animate attributeName="opacity" values=".18;.68;.18" dur="2.15s" repeatCount="indefinite"/>
+    </use>
+    <use href="#sorex-mark" fill="#edf7ff" filter="url(#soft-edge)">
+      <animate attributeName="fill" values="#dcecff;#ffffff;#dcecff" dur="2.15s" repeatCount="indefinite"/>
+    </use>
+  </g>
+</svg>
